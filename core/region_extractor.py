@@ -101,7 +101,6 @@ def _starts_with_list_marker(text: str) -> bool:
     for pattern in LIST_LINE_PATTERNS:
         if stripped.startswith(pattern):
             return True
-    # numbered list: "1." or "1)" but NOT "9.1" (section heading)
     if len(stripped) > 1 and stripped[0].isdigit() and stripped[1] in (".", ")"):
         if len(stripped) > 2 and stripped[2].isdigit():
             return False
@@ -300,3 +299,58 @@ def crop_region_to_image(
     clip = fitz.Rect(bbox)
     pix = page.get_pixmap(dpi=dpi, clip=clip)
     return pix.tobytes("png")
+
+
+
+# DPI adaptativo por regiao!!!! Ajuda do Claude Fable foi necessária
+#
+# PROBLEMA (medido em aulas reais): o dpi fixo de 200 gera recortes minusculos
+# para elementos pequenos. Um brasao de 60x40 pt vira 166x111 px - o texto
+# dentro dele fica com ~15 px de altura. Nenhum modelo de visao le isso, e
+# todos "chutam" (tres modelos diferentes leram "UFPR" como "JFP").
+#
+# SOLUCAO: como PDF e VETORIAL, renderizar a mesma regiao com dpi maior
+# recupera detalhe de verdade. Calculamos o dpi para que a MENOR dimensao do
+# recorte tenha pelo menos MIN_PIXELS px, respeitando um teto de memoria.
+
+PONTOS_POR_POLEGADA = 72.0
+
+MIN_PIXELS_MENOR_LADO = 800   # detalhe suficiente para ler texto pequeno
+MAX_PIXELS_MAIOR_LADO = 2200  # teto de memoria/banda por recorte
+DPI_BASE = 200                # nunca renderiza abaixo disso
+DPI_MAXIMO = 900              # teto de seguranca
+
+# Abaixo disso o recorte e ilegivel mesmo apos o aumento de dpi (ex.: uma
+# imagem rasterizada de baixa resolucao embutida no PDF). Melhor admitir que
+# nao da para ler do que deixar a IA inventar.
+MIN_PIXELS_LEGIVEL = 40
+
+
+def compute_adaptive_dpi(bbox: tuple[float, float, float, float]) -> int:
+    """Escolhe o dpi de renderizacao com base no tamanho da regiao em pontos.
+
+    Regioes pequenas (logos, brasoes, formulas inline) sao renderizadas com
+    dpi alto; regioes grandes (diagramas, paginas) mantem o dpi base.
+    """
+    largura_pt = max(0.0, bbox[2] - bbox[0])
+    altura_pt = max(0.0, bbox[3] - bbox[1])
+    menor_pt = min(largura_pt, altura_pt)
+    maior_pt = max(largura_pt, altura_pt)
+
+    if menor_pt <= 0 or maior_pt <= 0:
+        return DPI_BASE
+
+    # dpi necessario para o menor lado atingir MIN_PIXELS_MENOR_LADO
+    dpi_desejado = MIN_PIXELS_MENOR_LADO * PONTOS_POR_POLEGADA / menor_pt
+
+    # teto para que o maior lado nao exploda em memoria
+    dpi_teto_memoria = MAX_PIXELS_MAIOR_LADO * PONTOS_POR_POLEGADA / maior_pt
+
+    dpi = min(dpi_desejado, dpi_teto_memoria, DPI_MAXIMO)
+    dpi = max(dpi, DPI_BASE)  # nunca pior que o comportamento antigo
+    return int(dpi)
+
+
+def regiao_legivel(largura_px: int, altura_px: int) -> bool:
+    """Um recorte abaixo deste tamanho nao tem informacao para ser descrito."""
+    return min(largura_px, altura_px) >= MIN_PIXELS_LEGIVEL
