@@ -23,7 +23,7 @@ DOCLING_CLASSIFICATION = {
 
 
 def classify_region(region: Region) -> str:
-    # Docling regions come with pre-classified type
+    # Docling tem pre-classificadores
     if region.metadata.get("source") == "docling":
         docling_type = region.type
         result = DOCLING_CLASSIFICATION.get(docling_type)
