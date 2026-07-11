@@ -1,5 +1,6 @@
 import datetime
 import json
+import os
 import time
 from pathlib import Path
 from typing import Any, Callable, Coroutine
@@ -89,7 +90,7 @@ async def process(
         state_manager.verificar_cancelamento(task_id)
 
         if status_callback:
-            await status_callback("📄 Analisando arquivo...")
+            await status_callback("Analisando arquivo...")
 
         state_manager.atualizar(
             task_id,
@@ -119,6 +120,21 @@ async def process(
         if not raw_text.strip():
             raise RuntimeError("Resposta vazia do agente")
 
+        # Editor textual: le o documento MONTADO (visao de conjunto)
+        # e sinaliza inconsistencias internas. Nao reescreve nada, so detecta.
+        relatorio_edicao = None
+        if os.getenv("USAR_EDITOR", "false").lower() == "true":
+            try:
+                from core.agents.editor_textual import revisar_e_registrar
+
+                if status_callback:
+                    await status_callback("Revisando consistencia do texto...")
+                relatorio_edicao = await asyncio.to_thread(
+                    revisar_e_registrar, raw_text
+                )
+            except Exception as erro:
+                logger.warning("Editor textual indisponivel: {}", erro)
+
         canonical_document = build_canonical_document(
             resultado,
             title=file_path.stem,
@@ -128,6 +144,11 @@ async def process(
             source_path=str(file_path),
             audience=["reader"],
         )
+
+        # Anexa o relatorio ao documento canonico (metadado), para que a
+        # informacao nao se perca e possa ser exibida ou auditada depois
+        if relatorio_edicao is not None:
+            canonical_document["revisao_textual"] = relatorio_edicao.model_dump()
 
         state_manager.finalizar(
             task_id,
@@ -145,7 +166,7 @@ async def process(
         )
 
         if status_callback:
-            await status_callback("✅ Processamento finalizado com sucesso!")
+            await status_callback("✅✅✅ Processamento finalizado com sucesso!")
         return canonical_document
 
     except TaskCancelledError:
@@ -173,7 +194,7 @@ async def process(
         )
 
         if status_callback:
-            await status_callback("❌ Nao foi possivel processar o arquivo.")
+            await status_callback("❌❌❌ Nao foi possivel processar o arquivo.")
         return build_canonical_document(
             fallback,
             title=file_path.stem,
