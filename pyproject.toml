@@ -1,0 +1,99 @@
+[tool.poetry]
+name = "acessilia"
+version = "0.3.0"
+description = "Pipeline de adaptacao de material didatico para estudantes com deficiencia visual."
+authors = ["Equipe ACESSILIA"]
+license = "MIT"
+readme = "README.md"
+# Todo pacote importado em runtime precisa estar listado aqui. Já
+# esqueci metade (pipeline, renderers, validation...) e o resultado foi
+# um `poetry install` que subia e só quebrava no primeiro documento,
+# com ModuleNotFoundError.
+packages = [
+    {include = "config"},
+    {include = "core"},
+    {include = "interfaces"},
+    {include = "pipeline"},
+    {include = "renderers"},
+    {include = "schemas"},
+]
+
+[tool.poetry.dependencies]
+# PRECISA ser release final (3.11.1+), nunca rc/beta. Python 3.11.0rc1
+# nao tem sys.get_int_max_str_digits() - essa funcao so entrou no CPython
+# em set/2022, depois da rc1 (ago/2022). torch>=2.x depende dela na
+# importacao e quebra com AttributeError. Sintoma real: "import timm"
+# falhando com "Duplicate dispatch rule for <built-in function intern>"
+# mascarando o AttributeError verdadeiro por baixo.
+python = "^3.11"
+
+# --- Nucleo do pipeline ---
+pymupdf = ">=1.24.0"
+pillow = ">=10.0.0"
+# numpy<2: o Docling cai silenciosamente no PyMuPDF sob NumPy 2.x e o
+# numero de regioes extraidas explode. A falha nao aparece como erro -
+# aparece como saida pior.
+numpy = ">=1.26.0,<2.0"
+opencv-python = ">=4.9.0,<5.0"
+pypdf = ">=4.0.0"
+pytesseract = ">=0.3.10"
+
+# --- Matematica ---
+# Obrigatoria, nao opcional: sem ela o MathML sai None e a formula perde
+# a navegabilidade que e o proposito do projeto (achado F14).
+latex2mathml = ">=3.77"
+
+# --- Extrator de estrutura avancado ---
+# O modelo de layout do Docling (table-transformer) exige timm e
+# accelerate EXPLICITAMENTE; docling sozinho nao os traz. Sem eles todo
+# documento cai no fallback PyMuPDF.
+docling = ">=2.100.0"
+timm = ">=1.0.0"
+accelerate = ">=0.30.0"
+rapidocr = "*"
+
+# --- Agentes de IA ---
+# `openai` e exigido pelo Agno para falar com OpenRouter.
+agno = ">=1.0.0"
+openai = ">=1.0.0"
+
+# --- Documentos de saida ---
+python-docx = ">=1.1.0"
+# Importado direto por renderers/renderizador_docx.py (w:lang, alt-text,
+# tblHeader). Vinha por tabela como dependencia indireta do python-docx.
+lxml = ">=5.0.0"
+reportlab = ">=4.1.0"
+edge-tts = ">=7.2.0"
+
+# --- Interfaces (Telegram + Web + painel) ---
+aiogram = ">=3.12,<4.0"
+fastapi = ">=0.115"
+uvicorn = ">=0.30"
+python-multipart = ">=0.0.9"
+jinja2 = ">=3.1.3"
+slowapi = ">=0.1.10"
+playwright = ">=1.40.0"
+
+# --- Infraestrutura ---
+httpx = ">=0.27.0"
+aiofiles = ">=24.0.0"
+aiosmtplib = ">=3.0.1"
+loguru = ">=0.7.2"
+python-dotenv = ">=1.0.0"
+pydantic = ">=2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.0.0"
+pytest-asyncio = ">=0.24.0"
+pytest-cov = ">=5.0.0"
+respx = ">=0.21.0"
+
+[tool.poetry.scripts]
+acessilia = "interfaces.cli.run:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

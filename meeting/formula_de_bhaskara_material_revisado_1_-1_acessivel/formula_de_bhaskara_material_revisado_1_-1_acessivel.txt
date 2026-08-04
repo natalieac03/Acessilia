@@ -1,0 +1,22 @@
+Fórmula de Bhaskara
+O que significa cada componente e como usar a fórmula
+1. Quando a fórmula é usada?
+A fórmula de Bhaskara resolve equações do segundo grau escritas na forma geral
+a vezes x ao quadrado, mais b vezes x, mais c é igual a zero
+. Os coeficientes a, b e c são números reais, e a deve ser diferente de zero; caso contrário, a equação não é do segundo grau.
+FORMA GERAL
+a vezes x ao quadrado, mais b vezes x, mais c é igual a zero
+DISCRIMINANTE
+delta é igual a b ao quadrado menos quatro vezes a vezes c
+x é igual a uma fração. No numerador: menos b, mais ou menos, raiz quadrada de delta. No denominador: dois vezes a. Fim da fração
+2. Significado de cada componente
+Tabela com nove registros e duas colunas. Cabeçalhos: Componente, O que significa.
+Linha um: Componente: a; O que significa: Coeficiente do termo quadrático ax ao quadrado. Deve ser diferente de zero..
+Linha dois: Componente: b; O que significa: Coeficiente do termo linear bx..
+Linha três: Componente: c; O que significa: Termo constante, isto é, o termo sem x..
+Linha quatro: Componente: delta; O que significa: Discriminante: delta é igual a b ao quadrado menos quatroac. Indica quantas raízes reais existem..
+Linha cinco: Componente: menos b; O que significa: O oposto do coeficiente b. Se b é igual a menos cinco, então menos b é igual a cinco..
+Linha seis: Componente: mais ou menos; O que significa: Indica duas contas: uma usando mais e outra usando menos..
+Linha sete: Componente: raiz quadrada de delta; O que significa: Raiz quadrada do discriminante. Só é real quando delta é maior ou igual a zero..
+Linha oito: Componente: dois vezes a; O que significa: Denominador da fórmula: duas vezes o coeficiente a..
+Linha nove: Componente: x índice um e x índice dois; O que significa: Possíveis soluções da equação, também chamadas de raízes ou zeros..

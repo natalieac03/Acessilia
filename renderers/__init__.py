@@ -1,0 +1,4 @@
+from renderers.renderizador_docx import gerar_docx
+from renderers.renderizador_html import gerar_html
+from renderers.renderizador_pdf import gerar_pdf
+from renderers.renderizador_txt import gerar_txt

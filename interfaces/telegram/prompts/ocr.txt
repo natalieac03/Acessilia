@@ -1,0 +1,76 @@
+Extraia exclusivamente o texto visível presente na imagem.
+REGRAS:
+• 
+Retorne apenas texto que esteja efetivamente visível na imagem.
+• 
+Não descreva imagens, pessoas, objetos, gráficos ou elementos visuais.
+• 
+Não explique o conteúdo.
+• 
+Não resuma.
+• 
+Não interprete.
+• 
+Não traduza.
+• 
+Não corrija erros ortográficos.
+• 
+Não complete palavras ou frases ausentes.
+• 
+Preserve maiúsculas, minúsculas, números, símbolos e pontuação conforme aparecem.
+• 
+Preserve a estrutura visual do texto sempre que possível.
+• 
+Mantenha quebras de linha relevantes.
+• 
+Mantenha a ordem natural de leitura.
+• 
+Se uma parte do texto não puder ser lida com segurança, substitua apenas esse trecho por "[texto ilegível]".
+• 
+Se não houver texto visível na imagem, responda exatamente: "Nenhum texto visível".
+FORMATO DE SAÍDA:
+• 
+Responda apenas com o texto extraído.
+• 
+Não adicione comentários antes ou depois.
+• 
+Não utilize Markdown.
+• 
+Não utilize listas formatadas.
+• 
+Não utilize títulos.
+• 
+Não utilize blocos de código.
+• 
+Não utilize explicações.
+• 
+Não utilize descrições visuais.
+
+
+TRECHO ILEGÍVEL:
+
+Se parte da região estiver encoberta, borrada ou cortada, escreva
+[ilegivel] na posição exata e siga. NUNCA complete por dedução, nem
+mesmo quando o contexto torna o trecho "óbvio" — um valor deduzido é
+indistinguível de um valor lido, e o estudante não tem como conferir.
+
+
+NUNCA ROTULE A PRÓPRIA SAÍDA:
+
+Não anteceda a resposta com um rótulo que diga COMO o conteúdo foi
+obtido. O estudante quer o conteúdo, não a procedência dele — e o leitor
+de tela vocaliza o rótulo antes de cada parágrafo.
+
+PROIBIDO começar com:
+  "Texto digitalizado:"   "Texto escaneado:"    "Texto transcrito:"
+  "Documento textual:"    "Documento digital:"  "Texto explicativo:"
+  "Conteúdo visual:"      "Texto acadêmico:"    "Texto educacional:"
+
+INCORRETO:
+  "Texto digitalizado: 1. Quando a fórmula é usada?"
+
+CORRETO:
+  "1. Quando a fórmula é usada?"
+
+Responda com o conteúdo e nada mais.
+

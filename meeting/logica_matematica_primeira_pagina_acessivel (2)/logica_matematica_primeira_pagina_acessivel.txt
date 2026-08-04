@@ -1,0 +1,24 @@
+Lógica matemática e conjuntos
+Os símbolos matemáticos permitem registrar relações de forma curta e precisa. Neste material, cada exemplo aparece como uma frase explicativa seguida da expressão correspondente.
+Pertencimento e inclusão
+Em teoria dos conjuntos, as chaves indicam os elementos de um conjunto. Os símbolos de pertencimento relacionam um elemento a um conjunto; os símbolos de inclusão relacionam dois conjuntos.
+Tabela.
+Tabela com cinco registros e três colunas. Cabeçalhos: Símbolo, Nome, Significado.
+Linha um: Símbolo: pertence a; Nome: Pertence; Significado: Indica que um elemento faz parte de um conjunto..
+Linha dois: Símbolo: não pertence a; Nome: Não pertence; Significado: Indica que um elemento não faz parte de um conjunto..
+Linha três: Símbolo: está contido em; Nome: Subconjunto próprio; Significado: Todos os elementos do primeiro conjunto estão no segundo, e os conjuntos são diferentes..
+Linha quatro: Símbolo: está contido ou é igual a; Nome: Subconjunto; Significado: Todos os elementos do primeiro conjunto estão no segundo; os conjuntos podem ser iguais..
+Linha cinco: Símbolo: conjunto vazio; Nome: Conjunto vazio; Significado: Representa um conjunto que não possui elementos..
+Exemplos
+EXEMPLO 1
+O número 3 faz parte do conjunto formado por 1, 2, 3 e 4.
+três pertence a abre chaves, um, dois, três, quatro, fecha chaves
+EXEMPLO 2
+O número 7 não aparece entre os elementos do conjunto indicado.
+sete não pertence a abre chaves, um, dois, três, quatro, fecha chaves
+EXEMPLO 3
+O conjunto formado por 1 e 2 está propriamente contido no conjunto formado por 1, 2 e 3.
+abre chaves, um, dois, fecha chaves está contido em abre chaves, um, dois, três, fecha chaves
+EXEMPLO 4
+Todo número natural também é um número inteiro.
+naturais está contido ou é igual a inteiros
